@@ -2,6 +2,7 @@ module Api
   module V1
     class PantryItemsController < ApplicationController
       before_action :set_pantry_item, only: [ :show, :update, :destroy ]
+      load_and_authorize_resource
 
       def index
         @pantry_items = PantryItem.page(params[:page]).per(5)
@@ -22,6 +23,7 @@ module Api
 
       def create
         @pantry_item = PantryItem.new(pantry_item_params)
+        @pantry_item.user = current_user
         if @pantry_item.save
           render json: PantryItemSerializer.new(@pantry_item).serializable_hash.to_json, status: :created
         else
@@ -38,8 +40,11 @@ module Api
       end
 
       def destroy
-        @pantry_item.destroy
-        head :no_content
+        if @pantry_item.destroy
+          render json: { message: "Pantry Item deleted successfully" }, status: :ok
+        else
+          render json: { error: @pantry_item.errors.full_messages }, status: :unprocessable_entity
+        end
       end
 
       private
@@ -49,7 +54,7 @@ module Api
       end
 
       def pantry_item_params
-        params.require(:pantry_item).permit(:name, :quantity, :user_id)
+        params.require(:pantry_item).permit(:name, :quantity)
       end
     end
   end

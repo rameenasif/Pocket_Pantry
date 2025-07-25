@@ -2,6 +2,7 @@ module Api
   module V1
     class RecipesController < ApplicationController
       before_action :set_recipe, only: [ :show, :update, :destroy ]
+      load_and_authorize_resource
 
       def index
         @recipes = Recipe.page(params[:page]).per(5)
@@ -22,6 +23,7 @@ module Api
 
       def create
         @recipe = Recipe.new(recipe_params)
+        @recipe.user = current_user
         if @recipe.save
           render json: RecipeSerializer.new(@recipe).serializable_hash.to_json, status: :created
         else
@@ -38,8 +40,11 @@ module Api
       end
 
       def destroy
-        @recipe.destroy
-        head :no_content
+        if @recipe.destroy
+          render json: { message: "Recipe deleted successfully" }, status: :ok
+        else
+          render json: { errors: @recipe.errors.full_messages }, status: :unprocessable_entity
+        end
       end
 
       private
@@ -49,7 +54,7 @@ module Api
       end
 
       def recipe_params
-        params.require(:recipe).permit(:instructions, :user_id)
+        params.require(:recipe).permit(:instructions)
       end
     end
   end

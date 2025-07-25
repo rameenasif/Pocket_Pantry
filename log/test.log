@@ -1,0 +1,154 @@
+  [1m[35m (21.6ms)[0m  [1m[35mDROP DATABASE IF EXISTS `pocket_pantry_test`[0m
+  [1m[35m (10.1ms)[0m  [1m[35mCREATE DATABASE `pocket_pantry_test` DEFAULT CHARACTER SET `utf8mb4`[0m
+  [1m[35m (3.9ms)[0m  [1m[35mDROP TABLE IF EXISTS `grocery_items` CASCADE[0m
+  [1m[35m (41.5ms)[0m  [1m[35mCREATE TABLE `grocery_items` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` varchar(255), `user_id` bigint NOT NULL, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, INDEX `index_grocery_items_on_user_id` (`user_id`)) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci[0m
+  [1m[35m (3.5ms)[0m  [1m[35mDROP TABLE IF EXISTS `order_items` CASCADE[0m
+  [1m[35m (40.6ms)[0m  [1m[35mCREATE TABLE `order_items` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `order_id` bigint NOT NULL, `grocery_item_id` bigint NOT NULL, `quantity` int, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, INDEX `index_order_items_on_grocery_item_id` (`grocery_item_id`), INDEX `index_order_items_on_order_id` (`order_id`)) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci[0m
+  [1m[35m (5.2ms)[0m  [1m[35mDROP TABLE IF EXISTS `orders` CASCADE[0m
+  [1m[35m (41.5ms)[0m  [1m[35mCREATE TABLE `orders` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `total_price` decimal(10), `user_id` bigint NOT NULL, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, INDEX `index_orders_on_user_id` (`user_id`)) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci[0m
+  [1m[35m (2.9ms)[0m  [1m[35mDROP TABLE IF EXISTS `pantry_items` CASCADE[0m
+  [1m[35m (36.7ms)[0m  [1m[35mCREATE TABLE `pantry_items` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` varchar(255), `quantity` varchar(255), `user_id` bigint NOT NULL, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, INDEX `index_pantry_items_on_user_id` (`user_id`)) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci[0m
+  [1m[35m (2.8ms)[0m  [1m[35mDROP TABLE IF EXISTS `recipe_items` CASCADE[0m
+  [1m[35m (41.1ms)[0m  [1m[35mCREATE TABLE `recipe_items` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `recipe_id` bigint NOT NULL, `grocery_item_id` bigint NOT NULL, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, INDEX `index_recipe_items_on_grocery_item_id` (`grocery_item_id`), INDEX `index_recipe_items_on_recipe_id` (`recipe_id`)) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci[0m
+  [1m[35m (2.8ms)[0m  [1m[35mDROP TABLE IF EXISTS `recipes` CASCADE[0m
+  [1m[35m (33.3ms)[0m  [1m[35mCREATE TABLE `recipes` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `instructions` text, `user_id` bigint NOT NULL, `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, INDEX `index_recipes_on_user_id` (`user_id`)) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci[0m
+  [1m[35m (2.8ms)[0m  [1m[35mDROP TABLE IF EXISTS `tenants` CASCADE[0m
+  [1m[35m (29.0ms)[0m  [1m[35mCREATE TABLE `tenants` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci[0m
+  [1m[35m (2.7ms)[0m  [1m[35mDROP TABLE IF EXISTS `users` CASCADE[0m
+  [1m[35m (36.9ms)[0m  [1m[35mCREATE TABLE `users` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` varchar(255), `email` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, `tenant_id` bigint NOT NULL, `encrypted_password` varchar(255) DEFAULT '' NOT NULL, `reset_password_token` varchar(255), `reset_password_sent_at` datetime(6), `remember_created_at` datetime(6), `role` varchar(255), UNIQUE INDEX `index_users_on_reset_password_token` (`reset_password_token`), INDEX `index_users_on_tenant_id` (`tenant_id`)) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci[0m
+  [1m[35m (74.3ms)[0m  [1m[35mALTER TABLE `grocery_items` ADD CONSTRAINT `fk_rails_6a69e22475`
+FOREIGN KEY (`user_id`)
+  REFERENCES `users` (`id`)
+[0m
+  [1m[35m (83.4ms)[0m  [1m[35mALTER TABLE `order_items` ADD CONSTRAINT `fk_rails_594cb4e62b`
+FOREIGN KEY (`grocery_item_id`)
+  REFERENCES `grocery_items` (`id`)
+[0m
+  [1m[35m (104.4ms)[0m  [1m[35mALTER TABLE `order_items` ADD CONSTRAINT `fk_rails_e3cb28f071`
+FOREIGN KEY (`order_id`)
+  REFERENCES `orders` (`id`)
+[0m
+  [1m[35m (133.5ms)[0m  [1m[35mALTER TABLE `orders` ADD CONSTRAINT `fk_rails_f868b47f6a`
+FOREIGN KEY (`user_id`)
+  REFERENCES `users` (`id`)
+[0m
+  [1m[35m (101.7ms)[0m  [1m[35mALTER TABLE `pantry_items` ADD CONSTRAINT `fk_rails_99063cea88`
+FOREIGN KEY (`user_id`)
+  REFERENCES `users` (`id`)
+[0m
+  [1m[35m (78.6ms)[0m  [1m[35mALTER TABLE `recipe_items` ADD CONSTRAINT `fk_rails_dcce7b58f9`
+FOREIGN KEY (`grocery_item_id`)
+  REFERENCES `grocery_items` (`id`)
+[0m
+  [1m[35m (88.2ms)[0m  [1m[35mALTER TABLE `recipe_items` ADD CONSTRAINT `fk_rails_42c6cf9a77`
+FOREIGN KEY (`recipe_id`)
+  REFERENCES `recipes` (`id`)
+[0m
+  [1m[35m (75.9ms)[0m  [1m[35mALTER TABLE `recipes` ADD CONSTRAINT `fk_rails_9606fce865`
+FOREIGN KEY (`user_id`)
+  REFERENCES `users` (`id`)
+[0m
+  [1m[35m (99.2ms)[0m  [1m[35mALTER TABLE `users` ADD CONSTRAINT `fk_rails_135c8f54b2`
+FOREIGN KEY (`tenant_id`)
+  REFERENCES `tenants` (`id`)
+[0m
+  [1m[35m (27.4ms)[0m  [1m[35mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.9ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[35m (4.3ms)[0m  [1m[32mINSERT INTO `schema_migrations` (version) VALUES (20250725053321)[0m
+  [1m[35m (5.4ms)[0m  [1m[32mINSERT INTO `schema_migrations` (version) VALUES
+(20250724101252),
+(20250722112424),
+(20250722110612),
+(20250722082725),
+(20250722073414),
+(20250722063757),
+(20250722063732),
+(20250722063559),
+(20250722063230),
+(20250722062945),
+(20250722062500);[0m
+  [1m[35m (41.8ms)[0m  [1m[35mCREATE TABLE `ar_internal_metadata` (`key` varchar(255) NOT NULL PRIMARY KEY, `value` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (2.7ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[36mActiveRecord::InternalMetadata Create (5.3ms)[0m  [1m[32mINSERT INTO `ar_internal_metadata` (`key`, `value`, `created_at`, `updated_at`) VALUES ('environment', 'test', '2025-07-25 12:19:20.048200', '2025-07-25 12:19:20.048208')[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.8ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.7ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'schema_sha1' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[36mActiveRecord::InternalMetadata Create (5.2ms)[0m  [1m[32mINSERT INTO `ar_internal_metadata` (`key`, `value`, `created_at`, `updated_at`) VALUES ('schema_sha1', '87e751dcb78836a30623870aa0d6de626f28a97d', '2025-07-25 12:19:20.063016', '2025-07-25 12:19:20.063022')[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+Started GET "/api/v1/recipes" for 127.0.0.1 at 2025-07-25 17:19:20 +0500
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'schema_sha1' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+Started GET "/api/v1/recipes" for 127.0.0.1 at 2025-07-25 17:24:28 +0500
+Processing by Api::V1::RecipesController#index as HTML
+Completed 403 Forbidden in 223ms (Views: 0.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 36.8ms)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.5ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'schema_sha1' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+Started GET "/api/v1/grocery_items" for 127.0.0.1 at 2025-07-25 17:36:18 +0500
+  
+ActionController::RoutingError (No route matches [GET] "/api/v1/grocery_items"):
+  
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+Started GET "/api/v1/pantry_items" for 127.0.0.1 at 2025-07-25 17:36:20 +0500
+Processing by Api::V1::PantryItemsController#index as HTML
+Completed 403 Forbidden in 10ms (Views: 0.3ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (6.6ms)[0m  [1m[35mBEGIN[0m
+Started GET "/api/v1/recipes" for 127.0.0.1 at 2025-07-25 17:36:20 +0500
+Processing by Api::V1::RecipesController#index as HTML
+Completed 403 Forbidden in 4ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'schema_sha1' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+Started GET "/api/v1/groceries" for 127.0.0.1 at 2025-07-25 17:50:57 +0500
+Processing by Api::V1::GroceriesController#index as HTML
+Completed 500 Internal Server Error in 3ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.7ms)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+Started GET "/api/v1/pantry_items" for 127.0.0.1 at 2025-07-25 17:50:57 +0500
+Processing by Api::V1::PantryItemsController#index as HTML
+Completed 403 Forbidden in 274ms (Views: 0.3ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 111.1ms)
+  [1m[36mTRANSACTION (1.9ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.9ms)[0m  [1m[35mBEGIN[0m
+Started GET "/api/v1/recipes" for 127.0.0.1 at 2025-07-25 17:50:58 +0500
+Processing by Api::V1::RecipesController#index as HTML
+Completed 403 Forbidden in 7ms (Views: 0.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'schema_sha1' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+Started GET "/api/v1/groceries" for 127.0.0.1 at 2025-07-25 18:00:24 +0500
+Processing by Api::V1::GroceriesController#index as HTML
+Completed 403 Forbidden in 238ms (Views: 0.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 85.5ms)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+Started GET "/api/v1/pantry_items" for 127.0.0.1 at 2025-07-25 18:00:24 +0500
+Processing by Api::V1::PantryItemsController#index as HTML
+Completed 403 Forbidden in 4ms (Views: 0.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+  [1m[36mTRANSACTION (2.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (1.1ms)[0m  [1m[35mBEGIN[0m
+Started GET "/api/v1/recipes" for 127.0.0.1 at 2025-07-25 18:00:24 +0500
+Processing by Api::V1::RecipesController#index as HTML
+Completed 403 Forbidden in 4ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'schema_sha1' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+Started POST "/api/v1/impersonate/1" for 127.0.0.1 at 2025-07-25 18:18:10 +0500
+  
+ActionController::RoutingError (No route matches [POST] "/api/v1/impersonate/1"):
+  
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'schema_sha1' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+Started POST "/api/v1/impersonate/1" for 127.0.0.1 at 2025-07-25 18:21:55 +0500
+  
+ActionController::RoutingError (No route matches [POST] "/api/v1/impersonate/1"):
+  
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m

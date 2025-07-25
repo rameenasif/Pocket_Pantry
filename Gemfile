@@ -17,6 +17,11 @@ gem "turbo-rails"
 gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
+gem "devise"
+gem "devise-jwt"
+gem "cancancan", "~> 3.6"
+gem "omniauth"
+gem "omniauth-google-oauth2"
 gem "jsonapi-serializer"
 gem "kaminari"
 
@@ -56,6 +61,7 @@ group :development, :test do
 
   gem "faker"
   gem "rswag"
+  gem "rspec-rails", "~> 6.0"
 end
 
 group :development do
