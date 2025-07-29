@@ -6,6 +6,9 @@ class User < ApplicationRecord
   has_many :pantry_items
   has_many :orders
   has_many :recipes
+
+  default_scope { where(tenant_id: Current.tenant_id) }
+
   def admin?
     role =="admin"
   end
