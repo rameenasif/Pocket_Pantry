@@ -24,6 +24,7 @@ gem "omniauth"
 gem "omniauth-google-oauth2"
 gem "jsonapi-serializer"
 gem "kaminari"
+gem "discard"
 
 gem "rack-attack"
 

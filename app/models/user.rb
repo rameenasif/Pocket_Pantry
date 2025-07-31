@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  include Discard::Model
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: Devise::JWT::RevocationStrategies::Null
@@ -11,5 +12,9 @@ class User < ApplicationRecord
 
   def admin?
     role =="admin"
+  end
+
+  def regular?
+    role=="user"
   end
 end
