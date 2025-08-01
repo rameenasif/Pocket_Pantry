@@ -1,3 +1,5 @@
+require 'sidekiq/web' 
+
 Rails.application.routes.draw do
   devise_for :users, controllers: {
     registrations: "users/registrations",
@@ -7,6 +9,10 @@ Rails.application.routes.draw do
   devise_scope :user do
     post "/login", to: "users/sessions#create"
     delete "/logout", to: "users/sessions#destroy"
+  end
+
+  authenticate :user, ->(u) { u.admin? } do
+    mount Sidekiq::Web => "/sidekiq"
   end
 
   mount Rswag::Ui::Engine => "/api-docs"
