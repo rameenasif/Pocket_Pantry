@@ -1,0 +1,15 @@
+<h1>Hello <%= @user.name %>,</h1>
+
+<p>The following pantry items are about to expire:</p>
+
+<ul>
+  <% @items.each do |item| %>
+    <li>
+      <strong><%= item.name %></strong> — expires on <%= item.expiry_date.strftime("%B %d, %Y") %>
+    </li>
+  <% end %>
+</ul>
+
+<p>Please take necessary action before they expire.</p>
+
+<p>— Pocket Pantry Team</p>
