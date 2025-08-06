@@ -5,39 +5,83 @@ import './Signup.css';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [tenantId, setTenantId] = useState('');
 
   const handleLogin = async (e) => {
-    try {
-      const response = await axios.post('http://localhost:3000/login', {
-        user: { email, password }
-      });
+    e.preventDefault();
+    console.log('Login clicked');
 
-      localStorage.setItem('token', response.headers.authorization);
-      localStorage.setItem('user', JSON.stringify(response.data));
-      alert('Login successful');
+    try {
+      const response = await axios.post(
+        'http://localhost:3001/users/sign_in',
+        {
+          user: {
+            email,
+            password,
+            tenant_id: tenantId,
+          }
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          withCredentials: true
+        }
+      );
+
+      const user = response.data.user;
+      const token = response.headers['authorization'];
+
+      if (token) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+        alert('Login successful!');
+        window.location.href = '/userdashboard';
+      } else {
+        alert('Login failed. No token received.');
+      }
     } catch (error) {
-      console.error('Login failed:', error.response?.data || error);
+      console.error('Login error:', error.response?.data || error);
+      alert('Login failed. Check console for details.');
     }
   };
 
   return (
     <form onSubmit={handleLogin}>
-      <h2>Welcome Back to Pocket Pantry</h2>
+      <h2>Login</h2>
+
       <input
         type="email"
         placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
+        value={email}
+        onChange={e => setEmail(e.target.value)}
         required
       />
+
       <input
         type="password"
         placeholder="Password"
-        onChange={(e) => setPassword(e.target.value)}
+        value={password}
+        onChange={e => setPassword(e.target.value)}
         required
       />
+
+      <input
+        type="text"
+        placeholder="Tenant ID"
+        value={tenantId}
+        onChange={e => setTenantId(e.target.value)}
+        required
+      />
+
       <button type="submit">Login</button>
     </form>
   );
 }
 
 export default Login;
+
+
+
+

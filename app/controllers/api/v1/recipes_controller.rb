@@ -1,20 +1,22 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     class RecipesController < ApplicationController
-      before_action :set_recipe, only: [ :show, :update, :destroy ]
+      before_action :set_recipe, only: %i[show update destroy]
       load_and_authorize_resource
 
       def index
         @recipes = Recipe.page(params[:page]).per(5)
         render json: RecipeSerializer.new(@recipes, {
-          meta: {
-            current_page: @recipes.current_page,
-            next_page: @recipes.next_page,
-            prev_page: @recipes.prev_page,
-            total_pages: @recipes.total_pages,
-            total_count: @recipes.total_count
-          }
-        }).serializable_hash.to_json
+                                            meta: {
+                                              current_page: @recipes.current_page,
+                                              next_page: @recipes.next_page,
+                                              prev_page: @recipes.prev_page,
+                                              total_pages: @recipes.total_pages,
+                                              total_count: @recipes.total_count
+                                            }
+                                          }).serializable_hash.to_json
       end
 
       def show
@@ -24,7 +26,7 @@ module Api
       def create
         @recipe = Recipe.new(recipe_params)
         @recipe.user = current_user
-        @recipe.tenant_id=Current.tenant_id
+        @recipe.tenant_id = Current.tenant_id
 
         if @recipe.save
           render json: RecipeSerializer.new(@recipe).serializable_hash.to_json, status: :created
@@ -56,7 +58,7 @@ module Api
       end
 
       def recipe_params
-        params.require(:recipe).permit(:instructions)
+        params.require(:recipe).permit(:name, :instructions, :image)
       end
     end
   end
