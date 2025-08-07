@@ -14,13 +14,19 @@ const AddRecipeModal = ({ onClose, onRecipeAdded }) => {
     formData.append("recipe[image]", image);
 
     try {
-      await axios.post("http://localhost:3001/api/v1/recipes", formData);
+      await axios.post("http://localhost:3001/api/v1/recipes", formData, {
+        withCredentials: true, 
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
       setInstructions("");
       setImage(null);
       onRecipeAdded();    
       onClose(); 
     } catch (error) {
-      console.error("Error adding recipe:", error);
+      console.error("Error adding recipe:", error.response?.data || error.message);
     }
   };
 
@@ -42,15 +48,7 @@ const AddRecipeModal = ({ onClose, onRecipeAdded }) => {
             onChange={(e) => setImage(e.target.files[0])}
           />
           <button type="submit">Add</button>
-          <button
-            type="button"
-            onClick={() => {
-              console.log("Cancel clicked");
-              onClose();
-            }}
-          >
-            Cancel
-          </button>
+          <button type="button" onClick={onClose}>Cancel</button>
         </form>
       </div>
     </div>
@@ -58,3 +56,4 @@ const AddRecipeModal = ({ onClose, onRecipeAdded }) => {
 };
 
 export default AddRecipeModal;
+
