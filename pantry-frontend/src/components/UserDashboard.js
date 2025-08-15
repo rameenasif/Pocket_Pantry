@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AddRecipe from './AddRecipeModal'; // Make sure this is the modal component
+import { useSelector } from 'react-redux';
+import AddRecipe from './AddRecipeModal';
+import Cart from './Cart';
 import './UserDashboard.css';
 
 const UserDashboard = ({ setUser }) => {
   const navigate = useNavigate();
-  const [showAddRecipe, setShowAddRecipe] = useState(false); 
+  const [showAddRecipe, setShowAddRecipe] = useState(false);
+  const [showCart, setShowCart] = useState(false);
+
+  const cartItems = useSelector((state) => state.cart.items);
 
   const handleLogout = () => {
     localStorage.removeItem('user');
@@ -17,10 +22,16 @@ const UserDashboard = ({ setUser }) => {
     console.log("Recipe added successfully!");
   };
 
+  
+  const handleOrderNow = () => {
+    if (cartItems.length > 0) {
+      navigate('/checkout'); 
+    }
+  };
+
   return (
     <div className="dashboard-container">
       <div className="cards-section">
-
         <div className="welcome-section">
           <h2 style={{ fontSize: '35px', color: '#5e4a08ff' }}>
             Hello, Chef! Ready to Take Charge?
@@ -33,14 +44,19 @@ const UserDashboard = ({ setUser }) => {
         <div className="dashboard-card">
           <h3>🛒 Cart</h3>
           <p>Your selected items are waiting!</p>
-          <button onClick={() => alert("Redirect to Cart")}>View Cart</button>
+          <button onClick={() => setShowCart(true)}>View Cart</button>
+          {cartItems.length > 0 && (
+            <button style={{ marginTop: '10px' }} onClick={handleOrderNow}>
+              Order Now
+            </button>
+          )}
         </div>
 
         <div className="dashboard-card">
           <h3>🥘 Recipes</h3>
           <p>Cook something new today!</p>
           <button onClick={() => setShowAddRecipe(true)}>Add Recipe</button>
-          <button onClick={() => alert("Redirect to Your Recipes")}>View Your Recipes</button>
+          <button onClick={() => navigate('/recipes')}>View Your Recipes</button>
         </div>
 
         <div className="dashboard-card">
@@ -52,7 +68,13 @@ const UserDashboard = ({ setUser }) => {
         <div className="dashboard-card">
           <h3>📋 Grocery List</h3>
           <p>Don't forget your groceries!</p>
-          <button onClick={() => alert("Redirect to Grocery List")}>View Grocery List</button>
+          <button onClick={() => navigate('/grocery')}>View Grocery</button>
+        </div>
+
+        <div className="dashboard-card">
+          <h3>📦 Orders</h3>
+          <p>Track your orders!</p>
+          <button onClick={() => navigate('/orders')}>View Orders</button>
         </div>
 
         <button className="logout-button" onClick={handleLogout}>Logout</button>
@@ -60,22 +82,32 @@ const UserDashboard = ({ setUser }) => {
         {showAddRecipe && (
           <div className="add-recipe-form-section">
             <h3 style={{ marginTop: "30px", color: "#8A4F00" }}>Add a New Recipe</h3>
-            <AddRecipe 
-              onClose={() => setShowAddRecipe(false)} 
+            <AddRecipe
+              onClose={() => setShowAddRecipe(false)}
               onRecipeAdded={handleRecipeAdded}
             />
           </div>
         )}
+
+        {showCart && <Cart onClose={() => setShowCart(false)} />}
       </div>
 
       <div className="image-section">
-        <img src="/IMG_0453.jpeg" alt="Dashboard Picture" />
+        <img src="/IMG_0453.jpeg" alt="Dashboard" />
       </div>
     </div>
   );
 };
 
 export default UserDashboard;
+
+
+
+
+
+
+
+
 
 
 

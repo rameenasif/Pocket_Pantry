@@ -6,6 +6,8 @@ import MainScreen from './components/Mainscreen';
 import UserRecipes from './components/UserRecipes';
 import Grocery from './components/GroceryPage';
 import Cart from './components/Cart';
+import Orders from './components/Order'; 
+import Checkout from './components/Checkout'; 
 
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -18,7 +20,6 @@ function App() {
   const toggleDarkMode = () => {
     setDarkMode(!darkmode);
   };
-
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -54,22 +55,12 @@ function App() {
             <Route path="/recipes" element={<UserRecipes />} />
             <Route path="/grocery" element={<Grocery />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} /> 
+            <Route path="/orders" element={<Orders />} /> 
             <Route path="*" element={<Navigate to="/dashboard" />} />
           </>
         )}
       </Routes>
-
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
 
       <button className="toggle-button" onClick={toggleDarkMode}>
         Toggle Mode: {darkmode ? 'Light' : 'Dark'}
@@ -79,6 +70,8 @@ function App() {
 }
 
 export default App;
+
+
 
 
 
