@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import AddRecipe from './AddRecipeModal';
 import Cart from './Cart';
+import AddPantryItemModal from './AddPantryItemModal'; 
 import './UserDashboard.css';
 
 const UserDashboard = ({ setUser }) => {
   const navigate = useNavigate();
   const [showAddRecipe, setShowAddRecipe] = useState(false);
   const [showCart, setShowCart] = useState(false);
+  const [showAddPantry, setShowAddPantry] = useState(false); 
 
   const cartItems = useSelector((state) => state.cart.items);
 
@@ -22,6 +24,9 @@ const UserDashboard = ({ setUser }) => {
     console.log("Recipe added successfully!");
   };
 
+  const handlePantryItemAdded = () => {
+    console.log("Pantry item added successfully!");
+  };
   
   const handleOrderNow = () => {
     if (cartItems.length > 0) {
@@ -62,7 +67,8 @@ const UserDashboard = ({ setUser }) => {
         <div className="dashboard-card">
           <h3>🧂 Pantry Items</h3>
           <p>See what's in your pantry.</p>
-          <button onClick={() => alert("Redirect to Pantry Items")}>View Pantry</button>
+          <button onClick={() => setShowAddPantry(true)}>Add Pantry Item</button> 
+          <button onClick={() => navigate('/pantry')}>View Your Pantry</button>
         </div>
 
         <div className="dashboard-card">
@@ -79,12 +85,23 @@ const UserDashboard = ({ setUser }) => {
 
         <button className="logout-button" onClick={handleLogout}>Logout</button>
 
+
         {showAddRecipe && (
           <div className="add-recipe-form-section">
             <h3 style={{ marginTop: "30px", color: "#8A4F00" }}>Add a New Recipe</h3>
             <AddRecipe
               onClose={() => setShowAddRecipe(false)}
               onRecipeAdded={handleRecipeAdded}
+            />
+          </div>
+        )}
+
+        {showAddPantry && (
+          <div className="add-recipe-form-section">
+            <h3 style={{ marginTop: "30px", color: "#8A4F00" }}>Add a New Pantry Item</h3>
+            <AddPantryItemModal
+              onClose={() => setShowAddPantry(false)}
+              onPantryItemAdded={handlePantryItemAdded}
             />
           </div>
         )}
@@ -100,6 +117,7 @@ const UserDashboard = ({ setUser }) => {
 };
 
 export default UserDashboard;
+
 
 
 

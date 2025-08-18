@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from 'axios'; 
 import './Signup.css';
 
 function Signup() {
@@ -12,22 +12,30 @@ function Signup() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3001/users', {
-        user: {
-          email,
-          password,
-          password_confirmation: passwordConfirmation,
-          tenant_id: tenantId
+      const response = await axios.post(
+        'http://localhost:3001/users', 
+        {
+          user: {
+            email,
+            password,
+            password_confirmation: passwordConfirmation,
+            tenant_id: tenantId
+          }
+        },
+        {
+          withCredentials: true,  
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          }
         }
-      });
+      );
 
       const user = response.data.user;
-      localStorage.setItem('token', response.headers.authorization);
       localStorage.setItem('user', JSON.stringify(user));
 
       alert('Signup successful');
       window.location.reload();
-
     } catch (error) {
       console.error('Signup failed:', error.response?.data || error);
       alert('Signup failed. Please try again.');
@@ -72,3 +80,5 @@ function Signup() {
 }
 
 export default Signup;
+
+

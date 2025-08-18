@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
-import '../styles/Modal.css';
+import api from "../utils/axiosHelper";   
+import "../styles/Modal.css";
 
 const AddRecipeModal = ({ onClose, onRecipeAdded }) => {
   const [instructions, setInstructions] = useState("");
@@ -14,17 +14,16 @@ const AddRecipeModal = ({ onClose, onRecipeAdded }) => {
     formData.append("recipe[image]", image);
 
     try {
-      await axios.post("http://localhost:3001/api/v1/recipes", formData, {
-        withCredentials: true, 
+      await api.post("/recipes", formData, {
         headers: {
-          Accept: "application/json",
+          "Content-Type": "multipart/form-data",
         },
       });
 
       setInstructions("");
       setImage(null);
-      onRecipeAdded();    
-      onClose(); 
+      onRecipeAdded();
+      onClose();
     } catch (error) {
       console.error("Error adding recipe:", error.response?.data || error.message);
     }
@@ -33,7 +32,7 @@ const AddRecipeModal = ({ onClose, onRecipeAdded }) => {
   return (
     <div className="modal">
       <div className="modal-box">
-        <h3 style={{ fontSize: '26px' }}>Add Recipe</h3>
+        <h3 style={{ fontSize: "26px" }}>Add Recipe</h3>
         <form onSubmit={handleAddRecipe}>
           <input
             type="text"
@@ -48,7 +47,9 @@ const AddRecipeModal = ({ onClose, onRecipeAdded }) => {
             onChange={(e) => setImage(e.target.files[0])}
           />
           <button type="submit">Add</button>
-          <button type="button" onClick={onClose}>Cancel</button>
+          <button type="button" onClick={onClose}>
+            Cancel
+          </button>
         </form>
       </div>
     </div>
@@ -56,4 +57,7 @@ const AddRecipeModal = ({ onClose, onRecipeAdded }) => {
 };
 
 export default AddRecipeModal;
+
+
+
 

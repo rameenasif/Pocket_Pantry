@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from 'axios'; 
 import './Signup.css';
 
 function Login() {
@@ -13,34 +13,24 @@ function Login() {
 
     try {
       const response = await axios.post(
-        'http://localhost:3001/users/sign_in',
+        'http://localhost:3001/users/sign_in', 
         {
-          user: {
-            email,
-            password,
-            tenant_id: tenantId,
-          }
+          user: { email, password, tenant_id: tenantId }
         },
         {
+          withCredentials: true, 
           headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          withCredentials: true
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          }
         }
       );
 
       const user = response.data.user;
-      const token = response.headers['authorization'];
 
-      if (token) {
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
-        alert('Login successful!');
-        window.location.href = '/userdashboard';
-      } else {
-        alert('Login failed. No token received.');
-      }
+      localStorage.setItem('user', JSON.stringify(user)); 
+      alert('Login successful!');
+      window.location.href = '/userdashboard';
     } catch (error) {
       console.error('Login error:', error.response?.data || error);
       alert('Login failed. Check console for details.');
@@ -49,7 +39,7 @@ function Login() {
 
   return (
     <form onSubmit={handleLogin}>
-      <h2>Login</h2>
+      <h2>Your Pantry Awaits!</h2>
 
       <input
         type="email"
@@ -81,6 +71,8 @@ function Login() {
 }
 
 export default Login;
+
+
 
 
 
