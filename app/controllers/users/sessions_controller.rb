@@ -11,21 +11,20 @@ module Users
 
     def respond_with(resource, _opts = {})
       token = request.env["warden-jwt_auth.token"]
-
-      cookies.signed[:jwt] = {
-        value: token,
-        httponly: true,
-        same_site: :lax
-      }
-
-      render json: {
-        message: "Logged in successfully",
-        user: {
-          id: resource.id,
-          name: resource.name,
-          email: resource.email
-        }
-      }, status: :ok
+      
+      if token.present?
+        render json: {
+          message: "Logged in successfully",
+          user: {
+            id: resource.id,
+            name: resource.name,
+            email: resource.email
+          },
+          token: token
+        }, status: :ok
+      else
+        render json: { error: "Authentication failed" }, status: :unauthorized
+      end
     end
 
     def respond_to_on_destroy

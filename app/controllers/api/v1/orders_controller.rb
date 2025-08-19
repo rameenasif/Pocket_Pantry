@@ -35,7 +35,13 @@ module Api
       private
 
       def order_params
-        params.require(:order).permit(:status, grocery_item_ids: [])
+        params.require(:order).permit(
+          :status,
+          :name,
+          :address,
+          :phone,
+          grocery_item_ids: []
+        )
       end
     end
   end

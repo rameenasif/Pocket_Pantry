@@ -14,7 +14,7 @@ const AddRecipeModal = ({ onClose, onRecipeAdded }) => {
     formData.append("recipe[image]", image);
 
     try {
-      await api.post("/recipes", formData, {
+      await api.post("/api/v1/recipes", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

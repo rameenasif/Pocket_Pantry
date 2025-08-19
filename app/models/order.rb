@@ -1,8 +1,13 @@
+# frozen_string_literal: true
+
 class Order < ApplicationRecord
   include Discard::Model
 
   belongs_to :user
   has_many :order_items
   has_many :grocery_items, through: :order_items
+
+  validates :name, :address, :phone, presence: true, on: :checkout
+
   default_scope { where(tenant_id: Current.tenant_id) }
 end
