@@ -1,9 +1,22 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { cancelOrder } from "../redux/orderSlice"; 
+import api from "../utils/axiosHelper"; 
 import "./Order.css";
 
 const Orders = () => {
-  const orders = useSelector((state) => state.order.orders);
+  const orders = useSelector((state) => state.order.orders); 
+  const dispatch = useDispatch();
+
+  const handleCancel = async (id) => {
+    try {
+      await api.delete(`/orders/${id}`);
+      dispatch(cancelOrder(id));
+    } catch (error) {
+      console.error("Failed to cancel order:", error);
+      alert("Something went wrong while canceling your order.");
+    }
+  };
 
   return (
     <div className="orders-page">
@@ -16,17 +29,38 @@ const Orders = () => {
             [...orders].reverse().map((order, index) => (
               <div key={order.id} className="order-card">
                 <h3>Order {orders.length - index}</h3>
+
+                {order.details && (
+                  <div className="order-details">
+                    <p><strong>Name:</strong> {order.details.name}</p>
+                    <p><strong>Address:</strong> {order.details.address}</p>
+                    <p><strong>Phone:</strong> {order.details.phone}</p>
+                  </div>
+                )}
+
                 <ul>
                   {order.items.map((item) => (
                     <li key={item.id}>
-                      <img src={item.image} alt={item.name} />
+                      {item.image && (
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="order-item-img"
+                        />
+                      )}
                       <span>{item.name}</span>
                     </li>
                   ))}
                 </ul>
+
                 <div className="order-buttons">
                   <button className="update-btn">Update Order</button>
-                  <button className="cancel-btn">Cancel Order</button>
+                  <button
+                    className="cancel-btn"
+                    onClick={() => handleCancel(order.id)}
+                  >
+                    Cancel Order
+                  </button>
                 </div>
               </div>
             ))
@@ -37,7 +71,7 @@ const Orders = () => {
       <div className="orders-right">
         <img
           src="/IMG_1179.jpeg"
-          alt="Orders visual"
+          alt="Orders photo"
           className="orders-image"
         />
       </div>
@@ -46,6 +80,11 @@ const Orders = () => {
 };
 
 export default Orders;
+
+
+
+
+
 
 
 

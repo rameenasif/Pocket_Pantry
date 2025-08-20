@@ -28,8 +28,11 @@ module Api
 
       def destroy
         order = current_user.orders.find(params[:id])
-        order.destroy
-        render json: { message: "Order canceled" }
+        if order.destroy
+          render json: { message: "Order cancelled successfully" }, status: :ok
+        else
+          render json: { errors: "Failed to cancel your order" }, status: :unprocessable_entity
+        end
       end
 
       private
