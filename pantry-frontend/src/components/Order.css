@@ -1,0 +1,138 @@
+.orders-page {
+  display: flex;
+  background-color: beige;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.orders-left {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.orders-heading {
+  font-size: 28px;
+  color: #8a4f00;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.orders-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.order-card {
+  background-color: white;
+  border: 2px dashed #8a4f00;
+  border-radius: 15px;
+  width: 280px;
+  min-height: 350px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.order-card h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  color: #8a4f00;
+}
+
+.order-details {
+  background-color: #fdf5e6;
+  border: 1px solid #e0c080;
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.order-details p {
+  margin: 4px 0;
+  color: #444;
+}
+
+.order-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.order-card li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.order-card li span {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.order-item-img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.order-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.update-btn,
+.cancel-btn {
+  background-color: #806510;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.update-btn:hover,
+.cancel-btn:hover {
+  background-color: #e6ae36;
+}
+
+.no-orders {
+  font-size: 16px;
+  color: #555;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.orders-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 20px;
+}
+
+.orders-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
